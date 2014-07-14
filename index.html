@@ -1,0 +1,168 @@
+<body>
+<script src="jszip.js"></script>
+<style>
+body {
+    background: #236;
+}
+canvas {
+    border-radius: 40px;
+    background: #fff;
+}
+</style>
+<canvas width="822" height="1122"></canvas>
+<script>
+var JSZip = new require('jszip');
+var zip;
+
+var shapes = {
+    crab: '#A21D21',
+    eel: '#2B2B2B',
+    fish: '#F47C20',
+    jellyfish: '#0DAEBA',
+    shell: '#BB69AA',
+    shrimp: '#F37165',
+    snail: '#6D7C76',
+    star: '#D29C2D',
+    turtle: '#2C5C2D'
+};
+
+var canvas = document.querySelector('canvas'),
+    ctx = canvas.getContext('2d'),
+    w = canvas.width,
+    h = canvas.height,
+    s = 120,
+    pv = 190,
+    ph = 65,
+    x = 1.25;
+
+ctx.font = (pv - 40) + 'px Helvetica Neue';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'top';
+
+function drawCard(name, number, cb) {
+
+
+    var src = name + '.svg',
+        image = new Image();
+
+    function drawNumber() {
+        ctx.fillText(number, 138, 35);
+        ctx.drawImage(image, ph, pv, s * x, s * x);
+    }
+
+    function drawInner() {
+
+        var cw = (w - s) / 2,
+            ch = (h - s) / 2,
+            p = 20;
+
+        switch (number) {
+            case 1:
+                ctx.drawImage(image, cw, ch, s, s);
+                break;
+
+            case 2:
+                ctx.drawImage(image, cw, ch - s / 2 - p, s, s);
+                ctx.drawImage(image, cw, ch + s / 2 + p, s, s);
+                break;
+
+            case 3:
+                ctx.drawImage(image, cw, ch - s - p, s, s);
+                ctx.drawImage(image, cw, ch, s, s);
+                ctx.drawImage(image, cw, ch + s + p, s, s);
+                break;
+
+            case 4:
+                ctx.drawImage(image, cw - s/2 - p, ch - s / 2 - p, s, s);
+                ctx.drawImage(image, cw - s/2 - p, ch + s / 2 + p, s, s);
+                ctx.drawImage(image, cw + s/2 + p, ch - s / 2 - p, s, s);
+                ctx.drawImage(image, cw + s/2 + p, ch + s / 2 + p, s, s);
+                break;
+
+            case 5:
+                ctx.drawImage(image, cw - s/2 - p, ch - s - p, s, s);
+                ctx.drawImage(image, cw - s/2 - p, ch + s + p, s, s);
+
+                ctx.drawImage(image, cw, ch, s, s);
+
+                ctx.drawImage(image, cw + s/2 + p, ch - s - p, s, s);
+                ctx.drawImage(image, cw + s/2 + p, ch + s + p, s, s);
+                break;
+
+            case 6:
+                ctx.drawImage(image, cw - s/2 - p, ch - s - p, s, s);
+                ctx.drawImage(image, cw - s/2 - p, ch, s, s);
+                ctx.drawImage(image, cw - s/2 - p, ch + s + p, s, s);
+
+                ctx.drawImage(image, cw + s/2 + p, ch - s - p, s, s);
+                ctx.drawImage(image, cw + s/2 + p, ch, s, s);
+                ctx.drawImage(image, cw + s/2 + p, ch + s + p, s, s);
+                break;
+        }
+    }
+
+    image.onload = function () {
+        ctx.clearRect(0, 0, w, h);
+        ctx.save();
+
+        ctx.fillStyle = shapes[name];
+
+        drawInner();
+        drawNumber();
+        ctx.translate(w, h);
+        ctx.rotate(Math.PI);
+        drawNumber();
+        cb(canvas.toDataURL());
+        ctx.restore();
+    };
+    image.src = src;
+
+}
+
+var allCards = [].concat.apply([], Object.keys(shapes).map(function (name) {
+    var set = [];
+    for (var i = 0; i < 6; ++i) {
+        set.push([name, i + 1]);
+    }
+    return set;
+}));
+
+function generateZip(name) {
+    console.log('generating zip for', name);
+    var content = zip.generate();
+
+    // then trigger the download link:
+    var zipName = name + '.zip';
+    var a = document.createElement('a');
+    a.href = "data:application/zip;base64," + content;
+    a.download = zipName;
+    a.click();
+    zip = null;
+}
+
+var currentCard = 1;
+function drawCards() {
+    if (!zip) {
+        zip = new JSZip();
+    }
+    var args, name;
+    if (allCards.length > 0) {
+        args = allCards.shift();
+        console.log(args);
+        name = args[0] + '-' + args[1];
+        args.push(function (url) {
+            var data = url.substr(url.indexOf(','));
+            zip.file('cards/' + name + '.png', data, {base64: true});
+            if (args[1] === 6) {
+                generateZip(args[0]);
+            }
+            drawCards();
+        });
+
+        console.log('drawing card', name);
+        drawCard.apply(null, args);
+    }
+}
+
+</script>
+</body>

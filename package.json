@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "jszip": "^2.3.0"
+  }
+}
