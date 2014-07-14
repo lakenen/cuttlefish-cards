@@ -4,6 +4,10 @@
 
 Cuttlefish is a card game based on [Canadian Fish](http://en.wikipedia.org/wiki/Canadian_Fish). This project was built to generate Cuttlefish cards.
 
+## Credits
+
+All credit for the awesome card design goes to [Dora Chan](https://github.com/doralchan).
+
 ## License
 
 ([The MIT License](LICENSE))
