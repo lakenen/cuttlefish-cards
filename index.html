@@ -1,102 +1,139 @@
-<body>
+<!doctype html>
+<html>
+<head>
+<link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
 <script src="jszip.js"></script>
 <style>
 body {
     background: #236;
+    font-family: 'din condensed', 'ropa sans', sans-serif;
+    color: white;
 }
 canvas {
     border-radius: 40px;
     background: #fff;
+    width: 411px;
 }
 </style>
+</head>
+<body>
+<h1>1 2 3 4 5 6</h1>
 <canvas width="822" height="1122"></canvas>
+<button onclick="drawCards()">draw</button>
 <script>
 var JSZip = new require('jszip');
 var zip;
 
 var shapes = {
-    crab: '#A21D21',
-    eel: '#2B2B2B',
-    fish: '#F47C20',
-    jellyfish: '#0DAEBA',
-    shell: '#BB69AA',
-    shrimp: '#F37165',
-    snail: '#6D7C76',
-    star: '#D29C2D',
-    turtle: '#2C5C2D'
+    // crab: '#A21D21',
+    // eel: '#2B2B2B',
+    // fish: '#F47C20',
+    // jellyfish: '#0DAEBA',
+    // shell: '#BB69AA',
+    // shrimp: '#F37165',
+    // snail: '#6D7C76',
+    // star: '#D29C2D',
+    // turtle: '#2C5C2D'
+    crab: '#A11E21',
+    goldfish: '#ED8222',
+    jellyfish: '#F962B9',
+    narwhal: '#9E9E9E',
+    octopus: '#583392',
+    seahorse: '#64F0E9',
+    seaturtle: '#049600',
+    starfish: '#F3D60D',
+    whale: '#0683d9'
 };
 
 var canvas = document.querySelector('canvas'),
     ctx = canvas.getContext('2d'),
     w = canvas.width,
     h = canvas.height,
-    s = 120,
-    pv = 190,
-    ph = 65,
-    x = 1.25;
+    fontSize = 240,
+    iconSize = 140,
+    pv = 100,
+    ph = 100,
+    x = 1.6;
 
-ctx.font = (pv - 40) + 'px Helvetica Neue';
-ctx.textAlign = 'center';
-ctx.textBaseline = 'top';
+ctx.font = fontSize + 'px din condensed';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'bottom';
 
 function drawCard(name, number, cb) {
-
+    number = parseInt(number, 10);
 
     var src = name + '.svg',
-        image = new Image();
+        image = new Image(),
+        width = iconSize,
+        height;
 
     function drawNumber() {
-        ctx.fillText(number, 138, 35);
-        ctx.drawImage(image, ph, pv, s * x, s * x);
+        var textWidth = ctx.measureText(number).width;
+        ctx.fillText(number, ph, fontSize + pv);
+        ctx.drawImage(image, ph + (textWidth - width * x)/2, fontSize + 30, width * x, height * x);
     }
 
     function drawInner() {
 
-        var cw = (w - s) / 2,
-            ch = (h - s) / 2,
-            p = 20;
+        var cw = (w - width) / 2,
+            ch = (h - height) / 2,
+            paddingH = 0,
+            paddingV = (h - (height * 8)) / 8;
 
         switch (number) {
             case 1:
-                ctx.drawImage(image, cw, ch, s, s);
+                ctx.drawImage(image, cw, ch, width, height);
                 break;
 
             case 2:
-                ctx.drawImage(image, cw, ch - s / 2 - p, s, s);
-                ctx.drawImage(image, cw, ch + s / 2 + p, s, s);
+                ctx.drawImage(image, cw, ch - height / 2 - paddingV, width, height);
+                ctx.drawImage(image, cw, ch + height / 2 + paddingV, width, height);
                 break;
 
             case 3:
-                ctx.drawImage(image, cw, ch - s - p, s, s);
-                ctx.drawImage(image, cw, ch, s, s);
-                ctx.drawImage(image, cw, ch + s + p, s, s);
+                ctx.drawImage(image, cw, ch - height - paddingV, width, height);
+                ctx.drawImage(image, cw, ch, width, height);
+                ctx.drawImage(image, cw, ch + height + paddingV, width, height);
                 break;
 
             case 4:
-                ctx.drawImage(image, cw - s/2 - p, ch - s / 2 - p, s, s);
-                ctx.drawImage(image, cw - s/2 - p, ch + s / 2 + p, s, s);
-                ctx.drawImage(image, cw + s/2 + p, ch - s / 2 - p, s, s);
-                ctx.drawImage(image, cw + s/2 + p, ch + s / 2 + p, s, s);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch - height / 2 - paddingV, width, height);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch + height / 2 + paddingV, width, height);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch - height / 2 - paddingV, width, height);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch + height / 2 + paddingV, width, height);
                 break;
 
             case 5:
-                ctx.drawImage(image, cw - s/2 - p, ch - s - p, s, s);
-                ctx.drawImage(image, cw - s/2 - p, ch + s + p, s, s);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch - height - paddingV, width, height);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch + height + paddingV, width, height);
 
-                ctx.drawImage(image, cw, ch, s, s);
+                ctx.drawImage(image, cw, ch, width, height);
 
-                ctx.drawImage(image, cw + s/2 + p, ch - s - p, s, s);
-                ctx.drawImage(image, cw + s/2 + p, ch + s + p, s, s);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch - height - paddingV, width, height);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch + height + paddingV, width, height);
                 break;
 
             case 6:
-                ctx.drawImage(image, cw - s/2 - p, ch - s - p, s, s);
-                ctx.drawImage(image, cw - s/2 - p, ch, s, s);
-                ctx.drawImage(image, cw - s/2 - p, ch + s + p, s, s);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch - height - paddingV, width, height);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch, width, height);
+                ctx.drawImage(image, cw - width/2 - paddingH, ch + height + paddingV, width, height);
 
-                ctx.drawImage(image, cw + s/2 + p, ch - s - p, s, s);
-                ctx.drawImage(image, cw + s/2 + p, ch, s, s);
-                ctx.drawImage(image, cw + s/2 + p, ch + s + p, s, s);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch - height - paddingV, width, height);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch, width, height);
+                ctx.drawImage(image, cw + width/2 + paddingH, ch + height + paddingV, width, height);
+                break;
+
+            default:
+                if (!number) {
+                    break;
+                }
+                number = Math.min(999, number);
+                ctx.save()
+                ctx.globalAlpha = 0.1
+                for (var i = 0; i < number; ++i) {
+                    ctx.drawImage(image, Math.random() * (w - iconSize), Math.random() * (h - iconSize), iconSize, iconSize);
+                }
+                ctx.restore();
                 break;
         }
     }
@@ -104,6 +141,7 @@ function drawCard(name, number, cb) {
     image.onload = function () {
         ctx.clearRect(0, 0, w, h);
         ctx.save();
+        height = image.height / (image.width / width);
 
         ctx.fillStyle = shapes[name];
 
@@ -112,7 +150,7 @@ function drawCard(name, number, cb) {
         ctx.translate(w, h);
         ctx.rotate(Math.PI);
         drawNumber();
-        cb(canvas.toDataURL());
+        if (cb) cb(canvas.toDataURL());
         ctx.restore();
     };
     image.src = src;
@@ -141,6 +179,7 @@ function generateZip(name) {
 }
 
 var currentCard = 1;
+var out = '';
 function drawCards() {
     if (!zip) {
         zip = new JSZip();
@@ -149,10 +188,10 @@ function drawCards() {
     if (allCards.length > 0) {
         args = allCards.shift();
         console.log(args);
-        name = args[0] + '-' + args[1];
+        name = args[0] + '-' + args[1] + '.png';
         args.push(function (url) {
             var data = url.substr(url.indexOf(','));
-            zip.file('cards/' + name + '.png', data, {base64: true});
+            zip.file(name, data, {base64: true});
             if (args[1] === 6) {
                 generateZip(args[0]);
             }
@@ -160,9 +199,11 @@ function drawCards() {
         });
 
         console.log('drawing card', name);
+        out += '<img src="' + name + '" width="100"/>'
         drawCard.apply(null, args);
     }
 }
 
 </script>
 </body>
+</html>
