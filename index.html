@@ -13,12 +13,27 @@ canvas {
     border-radius: 40px;
     background: #fff;
     width: 411px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.overlay {
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  width: 339px;
+  height: 489px;
+  border: 1px dashed red;
+  border-radius: 20px;
+  box-sizing: border-box;
 }
 </style>
 </head>
 <body>
-<h1>1 2 3 4 5 6</h1>
-<canvas width="822" height="1122"></canvas>
+<div style="position: relative; width: 411px; height: 561px">
+  <canvas width="822" height="1122"></canvas>
+  <div class="overlay"></div>
+</div>
 <button onclick="drawCards()">draw</button>
 <script>
 var JSZip = new require('jszip');
@@ -50,14 +65,14 @@ var canvas = document.querySelector('canvas'),
     w = canvas.width,
     h = canvas.height,
     fontSize = 240,
-    iconSize = 140,
-    pv = 100,
-    ph = 100,
-    x = 1.6;
+    iconSize = 110,
+    pv = 130,
+    ph = 130,
+    x = 2;
 
 ctx.font = fontSize + 'px din condensed';
 ctx.textAlign = 'left';
-ctx.textBaseline = 'bottom';
+ctx.textBaseline = 'top';
 
 function drawCard(name, number, cb) {
     number = parseInt(number, 10);
@@ -69,8 +84,8 @@ function drawCard(name, number, cb) {
 
     function drawNumber() {
         var textWidth = ctx.measureText(number).width;
-        ctx.fillText(number, ph, fontSize + pv);
-        ctx.drawImage(image, ph + (textWidth - width * x)/2, fontSize + 30, width * x, height * x);
+        ctx.fillText(number, ph, pv);
+        ctx.drawImage(image, ph + (textWidth - width * x)/2, pv / 2 + fontSize, width * x, height * x);
     }
 
     function drawInner() {
@@ -78,7 +93,7 @@ function drawCard(name, number, cb) {
         var cw = (w - width) / 2,
             ch = (h - height) / 2,
             paddingH = 0,
-            paddingV = (h - (height * 8)) / 8;
+            paddingV = (h - (iconSize * 8)) / 8;
 
         switch (number) {
             case 1:
@@ -101,6 +116,14 @@ function drawCard(name, number, cb) {
                 ctx.drawImage(image, cw - width/2 - paddingH, ch + height / 2 + paddingV, width, height);
                 ctx.drawImage(image, cw + width/2 + paddingH, ch - height / 2 - paddingV, width, height);
                 ctx.drawImage(image, cw + width/2 + paddingH, ch + height / 2 + paddingV, width, height);
+
+                // playing around with flipping half of them
+                // ctx.save();
+                // ctx.translate(w, h);
+                // ctx.scale(-1, -1);
+                // ctx.drawImage(image, cw - width/2 - paddingH, ch - height / 2 - paddingV, width, height);
+                // ctx.drawImage(image, cw - width/2 - paddingH, ch + height / 2 + paddingV, width, height);
+                // ctx.restore();
                 break;
 
             case 5:
@@ -199,11 +222,12 @@ function drawCards() {
         });
 
         console.log('drawing card', name);
-        out += '<img src="' + name + '" width="100"/>'
+        // out += '<img src="' + name + '" width="100"/>'
         drawCard.apply(null, args);
     }
 }
 
+// drawCard('seaturtle', 5)
 </script>
 </body>
 </html>
