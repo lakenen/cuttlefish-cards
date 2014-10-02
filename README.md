@@ -2,7 +2,7 @@
 
 <img src="https://rawgithub.com/lakenen/cuttlefish/master/cuttlefish.svg" width="320" />
 
-Cuttlefish is a card game based on [Canadian Fish](http://en.wikipedia.org/wiki/Canadian_Fish). This project was built to generate Cuttlefish cards.
+[Cuttlefish](http://cuttlefish.cards) is a card game based on [Canadian Fish](http://en.wikipedia.org/wiki/Canadian_Fish). This project was built to generate Cuttlefish cards for printing.
 
 ## Credits
 
