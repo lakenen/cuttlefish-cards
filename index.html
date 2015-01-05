@@ -65,10 +65,10 @@ var canvas = document.querySelector('canvas'),
     w = canvas.width,
     h = canvas.height,
     fontSize = 240,
-    iconSize = 110,
-    pv = 130,
-    ph = 130,
-    x = 2;
+    iconSize = 180,
+    pv = 120,
+    ph = 110,
+    x = 1.8;
 
 ctx.font = fontSize + 'px din condensed';
 ctx.textAlign = 'left';
@@ -93,7 +93,7 @@ function drawCard(name, number, cb) {
         var cw = (w - width) / 2,
             ch = (h - height) / 2,
             paddingH = 0,
-            paddingV = (h - (iconSize * 8)) / 8;
+            paddingV = (h - (iconSize * 5)) / 8;
 
         switch (number) {
             case 1:
