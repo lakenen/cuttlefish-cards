@@ -12,4 +12,4 @@ All credit for the awesome card design goes to [Dora Chan](https://github.com/do
 
 ([The MIT License](LICENSE))
 
-Copyright 2014 Cameron Lakenen
+Copyright 2015 Cameron Lakenen and Dora Chan
